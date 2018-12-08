@@ -1,3 +1,3 @@
-| CircleCi | Code Coverage |
-| -- | -- |
-| [![CircleCI](https://circleci.com/gh/gfoidl/Analyzers/tree/master.svg?style=svg)](https://circleci.com/gh/gfoidl/Analyzers/tree/master) | [![codecov](https://codecov.io/gh/gfoidl/Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/gfoidl/Analyzers) |
+| CircleCi | Code Coverage | NuGet | MyGet |
+| -- | -- | -- | -- |
+| [![CircleCI](https://circleci.com/gh/gfoidl/Analyzers/tree/master.svg?style=svg)](https://circleci.com/gh/gfoidl/Analyzers/tree/master) | [![codecov](https://codecov.io/gh/gfoidl/Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/gfoidl/Analyzers) | [![](https://img.shields.io/nuget/v/gfoidl.Analyzers.svg?style=flat-square)](https://www.nuget.org/packages/gfoidl.Analyzers/) | [![](https://img.shields.io/myget/gfoidl/v/gfoidl.Analyzers.svg?style=flat-square)](https://www.myget.org/feed/gfoidl/package/nuget/gfoidl.Analyzers) |
