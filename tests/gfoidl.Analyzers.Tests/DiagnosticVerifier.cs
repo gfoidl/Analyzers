@@ -36,7 +36,7 @@ namespace gfoidl.Analyzers.Tests
                 Compilation compilation = await project.GetCompilationAsync();
 
                 // Enable any additional diagnostics
-                Microsoft.CodeAnalysis.CompilationOptions options = compilation.Options;
+                CompilationOptions options = compilation.Options;
 
                 if (additionalEnabledDiagnostics?.Length > 0)
                 {
