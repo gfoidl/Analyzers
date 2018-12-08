@@ -36,17 +36,20 @@ namespace gfoidl.Analyzers
             IdentifierNameSyntax identifier = syntaxContext.Node as IdentifierNameSyntax;
 
             TypeInfo symbolInfo = ModelExtensions.GetTypeInfo(syntaxContext.SemanticModel, identifier, syntaxContext.CancellationToken);
+            ITypeSymbol type    = symbolInfo.Type;
 
-            if (symbolInfo.Type == null)
+            if (type == null)
                 return;
-
-            ITypeSymbol type = symbolInfo.Type;
 
             if (!IsInternal(type.ContainingNamespace))
             {
                 // don't care about non-pubternal type references
                 return;
             }
+
+            SyntaxNode parent = identifier.Parent;
+            if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+                return;
 
             if (!syntaxContext.ContainingSymbol.ContainingAssembly.Equals(type.ContainingAssembly))
                 syntaxContext.ReportDiagnostic(Diagnostic.Create(
