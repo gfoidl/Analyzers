@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{59363A62-2D00-4A68-BB82-30BDA2058195}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{FE2B5DB4-AC42-4AB9-87FD-F01383AD2416}"
+	ProjectSection(SolutionItems) = preProject
+		build.sh = build.sh
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".circleci", ".circleci", "{8B016A31-6783-4BD2-B88E-5DAA50EAD816}"
+	ProjectSection(SolutionItems) = preProject
+		.circleci\config.yml = .circleci\config.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{15F1213F-0B11-46A3-B7B5-9A32D49416E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1DF7198C-10D7-45A0-990E-DFF8FF1D225E}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gfoidl.Analyzers", "source\gfoidl.Analyzers\gfoidl.Analyzers.csproj", "{D07EC873-2529-418E-8DBE-424AAAAFC4CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gfoidl.Analyzers.Tests", "tests\gfoidl.Analyzers.Tests\gfoidl.Analyzers.Tests.csproj", "{55E5F853-FB89-4903-981B-FF05E800F877}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D07EC873-2529-418E-8DBE-424AAAAFC4CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07EC873-2529-418E-8DBE-424AAAAFC4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07EC873-2529-418E-8DBE-424AAAAFC4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D07EC873-2529-418E-8DBE-424AAAAFC4CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E5F853-FB89-4903-981B-FF05E800F877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E5F853-FB89-4903-981B-FF05E800F877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E5F853-FB89-4903-981B-FF05E800F877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E5F853-FB89-4903-981B-FF05E800F877}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8B016A31-6783-4BD2-B88E-5DAA50EAD816} = {FE2B5DB4-AC42-4AB9-87FD-F01383AD2416}
+		{D07EC873-2529-418E-8DBE-424AAAAFC4CA} = {15F1213F-0B11-46A3-B7B5-9A32D49416E3}
+		{55E5F853-FB89-4903-981B-FF05E800F877} = {1DF7198C-10D7-45A0-990E-DFF8FF1D225E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCF951A9-B72B-48D1-96E1-63ECFF62F5A1}
+	EndGlobalSection
+EndGlobal
