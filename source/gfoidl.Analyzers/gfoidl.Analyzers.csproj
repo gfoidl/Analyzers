@@ -4,4 +4,17 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <!-- not needed for an analyzer project -->
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="$(OutputPath)$(AssemblyName).dll" PackagePath="analyzers" Visible="false" />
+    </ItemGroup>
+
 </Project>
