@@ -25,9 +25,9 @@ namespace gfoidl.Analyzers
         {
             context.EnableConcurrentExecution();
 
-            context.RegisterCompilationStartAction(analysisContext =>
+            context.RegisterCompilationStartAction(compilationStartAnalysisContext =>
             {
-                analysisContext.RegisterSyntaxNodeAction(AnalyzeTypeUsage, SyntaxKind.IdentifierName);
+                compilationStartAnalysisContext.RegisterSyntaxNodeAction(AnalyzeTypeUsage, SyntaxKind.IdentifierName);
             });
         }
         //---------------------------------------------------------------------
