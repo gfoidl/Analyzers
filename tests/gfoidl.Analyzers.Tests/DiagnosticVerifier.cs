@@ -53,7 +53,7 @@ namespace gfoidl.Analyzers.Tests
                 foreach (Diagnostic diag in diags)
                     TestContext.WriteLine("Diagnostics: " + diag);
 
-                Assert.False(diags.Any(d => d.Id == "AD0001"));
+                Assume.That(diags.Any(d => d.Id == "AD0001"), Is.False, "diagnostics with AD0001 present");
 
                 // Filter out non-error diagnostics not produced by our analyzer
                 // We want to KEEP errors because we might have written bad code. But sometimes we leave warnings in to make the

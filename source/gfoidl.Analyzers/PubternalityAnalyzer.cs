@@ -34,14 +34,11 @@ namespace gfoidl.Analyzers
         private static void AnalyzeTypeUsage(SyntaxNodeAnalysisContext syntaxContext)
         {
             IdentifierNameSyntax identifier = syntaxContext.Node as IdentifierNameSyntax;
+            ITypeSymbol type                = GetTypeInfo(syntaxContext, identifier);
 
-            TypeInfo symbolInfo = ModelExtensions.GetTypeInfo(syntaxContext.SemanticModel, identifier, syntaxContext.CancellationToken);
-            ITypeSymbol type    = symbolInfo.Type;
+            if (type == null) return;
 
-            if (type == null)
-                return;
-
-            if (!IsInternal(type.ContainingNamespace))
+            if (!IsNamespaceInternal(type.ContainingNamespace))
             {
                 // don't care about non-pubternal type references
                 return;
@@ -49,7 +46,21 @@ namespace gfoidl.Analyzers
 
             SyntaxNode parent = identifier.Parent;
             if (parent.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-                return;
+            {
+                var memberAccess = parent as MemberAccessExpressionSyntax;
+
+                if (memberAccess.OperatorToken.IsKind(SyntaxKind.DotToken))
+                {
+                    ExpressionSyntax exp = memberAccess.Expression;
+                    ITypeSymbol type1    = GetTypeInfo(syntaxContext, exp);
+
+                    if (type1 != null)
+                    {
+                        if (!IsNamespaceInternal(type1.ContainingNamespace))
+                            return;
+                    }
+                }
+            }
 
             if (!syntaxContext.ContainingSymbol.ContainingAssembly.Equals(type.ContainingAssembly))
                 syntaxContext.ReportDiagnostic(Diagnostic.Create(
@@ -58,7 +69,14 @@ namespace gfoidl.Analyzers
                     type.ToDisplayString()));
         }
         //---------------------------------------------------------------------
-        private static bool IsInternal(INamespaceSymbol ns)
+        private static ITypeSymbol GetTypeInfo(SyntaxNodeAnalysisContext syntaxContext, SyntaxNode node)
+        {
+            TypeInfo symbolInfo = syntaxContext.SemanticModel.GetTypeInfo(node, syntaxContext.CancellationToken);
+
+            return symbolInfo.Type;
+        }
+        //---------------------------------------------------------------------
+        private static bool IsNamespaceInternal(INamespaceSymbol ns)
         {
             while (ns != null)
             {
