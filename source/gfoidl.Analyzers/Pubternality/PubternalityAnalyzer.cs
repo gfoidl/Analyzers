@@ -55,10 +55,9 @@ namespace gfoidl.Analyzers
                     ExpressionSyntax exp = memberAccess.Expression;
                     ITypeSymbol type1    = GetTypeInfo(syntaxContext, exp);
 
-                    if (type1 != null)
+                    if (type1 != null && !IsNamespaceInternal(type1.ContainingNamespace))
                     {
-                        if (!IsNamespaceInternal(type1.ContainingNamespace))
-                            return;
+                        return;
                     }
                 }
             }
@@ -81,15 +80,25 @@ namespace gfoidl.Analyzers
         //---------------------------------------------------------------------
         private static bool IsNamespaceInternal(INamespaceSymbol ns)
         {
+            bool isInternal = false;
+            bool isGfoidl   = false;
+
             while (ns != null)
             {
                 if (ns.Name == "Internal")
-                    return true;
+                {
+                    isInternal = true;
+                }
+
+                if (ns.Name == "gfoidl")
+                {
+                    isGfoidl = true;
+                }
 
                 ns = ns.ContainingNamespace;
             }
 
-            return false;
+            return isInternal && isGfoidl;
         }
     }
 }

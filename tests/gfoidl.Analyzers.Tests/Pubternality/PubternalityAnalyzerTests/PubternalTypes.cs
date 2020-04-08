@@ -12,7 +12,7 @@ namespace gfoidl.Analyzers.Tests.Tests.PubternalityAnalyzerTests
         public async Task Field___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Internal
+namespace gfoidl.Internal
 {
     public class Bar
     {
@@ -21,7 +21,43 @@ namespace MyLib.Internal
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Internal;
+using gfoidl.Internal;
+
+namespace MyProgram
+{
+    internal class Worker
+    {
+        private /*MM*/Bar _bar = new Bar();
+    }
+}");
+            Diagnostic[] diagnostics    = await this.GetDiagnosticsWithProjectReference(code.Source, library);
+            DiagnosticLocation expected = code.DefaultMarkerLocation;
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(1, diagnostics.Length);
+
+                Diagnostic diagnostic = diagnostics[0];
+                Assert.AreEqual("GF0001", diagnostic.Id);
+                Assert.IsTrue(diagnostic.Location.IsInSource);
+                Assert.That(diagnostic.Location, Is.EqualTo(expected));
+            });
+        }
+        //---------------------------------------------------------------------
+        [Test]
+        public async Task Pubternal_type_in_namespace_field___warning_GF0001()
+        {
+            string library = @"
+namespace gfoidl.Test.Internal
+{
+    public class Bar
+    {
+        public void Do() { }
+    }
+}";
+
+            TestSource code = TestSource.Read(@"
+using gfoidl.Test.Internal;
 
 namespace MyProgram
 {
@@ -48,7 +84,7 @@ namespace MyProgram
         public async Task Pubternal_type_in_nested_namespace_field___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Internal.Services
+namespace gfoidl.Internal.Services
 {
     public class Bar
     {
@@ -57,7 +93,7 @@ namespace MyLib.Internal.Services
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Internal.Services;
+using gfoidl.Internal.Services;
 
 namespace MyProgram
 {
@@ -84,7 +120,7 @@ namespace MyProgram
         public async Task Local___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Internal
+namespace gfoidl.Internal
 {
     public class Bar
     {
@@ -93,7 +129,7 @@ namespace MyLib.Internal
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Internal;
+using gfoidl.Internal;
 
 namespace MyProgram
 {
@@ -123,7 +159,7 @@ namespace MyProgram
         public async Task Local_declared_with_var___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Internal
+namespace gfoidl.Internal
 {
     public class Bar
     {
@@ -132,7 +168,7 @@ namespace MyLib.Internal
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Internal;
+using gfoidl.Internal;
 
 namespace MyProgram
 {
@@ -162,7 +198,7 @@ namespace MyProgram
         public async Task Issue_1_used_to_hide_pubternals___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Internal
+namespace gfoidl.Internal
 {
     public abstract class Base
     {
@@ -180,7 +216,7 @@ namespace MyLib.Internal
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Internal;
+using gfoidl.Internal;
 
 namespace MyProgram
 {

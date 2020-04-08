@@ -1,17 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
 namespace gfoidl.Analyzers.Tests.Tests.PubternalityAnalyzerTests
 {
     [TestFixture]
-    public class PublicTypes : PubternalityAnalyzerTestsBase
+    public class PubternalTypesNotInNsGfoidl : PubternalityAnalyzerTestsBase
     {
         [Test]
-        public async Task Field___no_warning_or_error()
+        public async Task Field___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Services
+namespace MyLib.Internal
 {
     public class Bar
     {
@@ -20,13 +21,13 @@ namespace MyLib.Services
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Services;
+using MyLib.Internal;
 
 namespace MyProgram
 {
     internal class Worker
     {
-        private Bar _bar = new Bar();
+        private /*MM*/Bar _bar = new Bar();
     }
 }");
             Diagnostic[] diagnostics = await this.GetDiagnosticsWithProjectReference(code.Source, library);
@@ -35,10 +36,10 @@ namespace MyProgram
         }
         //---------------------------------------------------------------------
         [Test]
-        public async Task Local___no_warning_or_error()
+        public async Task Pubternal_type_in_nested_namespace_field___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Services
+namespace MyLib.Internal.Services
 {
     public class Bar
     {
@@ -47,7 +48,34 @@ namespace MyLib.Services
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Services;
+using MyLib.Internal.Services;
+
+namespace MyProgram
+{
+    internal class Worker
+    {
+        private /*MM*/Bar _bar = new Bar();
+    }
+}");
+            Diagnostic[] diagnostics = await this.GetDiagnosticsWithProjectReference(code.Source, library);
+
+            Assert.AreEqual(0, diagnostics.Length);
+        }
+        //---------------------------------------------------------------------
+        [Test]
+        public async Task Local___warning_GF0001()
+        {
+            string library = @"
+namespace MyLib.Internal
+{
+    public class Bar
+    {
+        public void Do() { }
+    }
+}";
+
+            TestSource code = TestSource.Read(@"
+using MyLib.Internal;
 
 namespace MyProgram
 {
@@ -55,7 +83,7 @@ namespace MyProgram
     {
         public void Do()
         {
-            Bar bar = new Bar();
+            /*MM*/Bar bar = new Bar();
         }
     }
 }");
@@ -65,10 +93,10 @@ namespace MyProgram
         }
         //---------------------------------------------------------------------
         [Test]
-        public async Task Local_declared_as_var___no_warning_or_error()
+        public async Task Local_declared_with_var___warning_GF0001()
         {
             string library = @"
-namespace MyLib.Services
+namespace MyLib.Internal
 {
     public class Bar
     {
@@ -77,7 +105,7 @@ namespace MyLib.Services
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib.Services;
+using MyLib.Internal;
 
 namespace MyProgram
 {
@@ -85,7 +113,7 @@ namespace MyProgram
     {
         public void Do()
         {
-            var bar = new Bar();
+            /*MM*/var bar = new Bar();
         }
     }
 }");
@@ -95,13 +123,11 @@ namespace MyProgram
         }
         //---------------------------------------------------------------------
         [Test]
-        public async Task Issue_1_used_to_hide_pubternals___no_warning_or_error()
+        public async Task Issue_1_used_to_hide_pubternals___warning_GF0001()
         {
             string library = @"
-namespace MyLib
+namespace MyLib.Internal
 {
-    using MyLib.Internal;
-
     public abstract class Base
     {
         private static readonly Bar s_bar = new Bar();
@@ -110,10 +136,7 @@ namespace MyLib
 
         public abstract void Do();
     }
-}
 
-namespace MyLib.Internal
-{
     public sealed class Bar : Base
     {
         public override void Do() { }
@@ -121,7 +144,7 @@ namespace MyLib.Internal
 }";
 
             TestSource code = TestSource.Read(@"
-using MyLib;
+using MyLib.Internal;
 
 namespace MyProgram
 {
@@ -129,10 +152,11 @@ namespace MyProgram
     {
         public void Work()
         {
-            Base.Default.Do();
+            /*M0*/Base./*M1*/Default.Do();
         }
     }
-}");
+}", "M0", "M1");
+
             Diagnostic[] diagnostics = await this.GetDiagnosticsWithProjectReference(code.Source, library);
 
             Assert.AreEqual(0, diagnostics.Length);
