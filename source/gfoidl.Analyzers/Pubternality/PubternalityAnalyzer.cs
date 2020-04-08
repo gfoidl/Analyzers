@@ -23,6 +23,7 @@ namespace gfoidl.Analyzers
         //---------------------------------------------------------------------
         public override void Initialize(AnalysisContext context)
         {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
 
             context.RegisterCompilationStartAction(compilationStartAnalysisContext =>
@@ -62,11 +63,13 @@ namespace gfoidl.Analyzers
                 }
             }
 
-            if (!syntaxContext.ContainingSymbol.ContainingAssembly.Equals(type.ContainingAssembly))
+            if (syntaxContext.ContainingSymbol.ContainingAssembly != type.ContainingAssembly)
+            {
                 syntaxContext.ReportDiagnostic(Diagnostic.Create(
                     PubturnalityDescriptors.GF0001,
                     identifier.GetLocation(),
                     type.ToDisplayString()));
+            }
         }
         //---------------------------------------------------------------------
         private static ITypeSymbol GetTypeInfo(SyntaxNodeAnalysisContext syntaxContext, SyntaxNode node)

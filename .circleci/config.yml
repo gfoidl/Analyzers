@@ -3,7 +3,7 @@ version: 2.1
 executors:
     dotnet-executor:
         docker:
-            - image: microsoft/dotnet:2.2-sdk
+            - image: mcr.microsoft.com/dotnet/core/sdk:3.1
               environment:
                 DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
                 DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -115,12 +115,12 @@ workflows:
             - release_build_test:
                 filters:
                     tags:
-                        only: /^v[0-9]\.[0-9]\.[0-9](-preview-[0-9]+)?$/
+                        only: /^v[0-9]+\.[0-9]+\.[0-9]+(-preview-[0-9]+)?$/
 
             - debug_build_test:
                 filters:
                     tags:
-                        only: /^v[0-9]\.[0-9]\.[0-9](-preview-[0-9]+)?$/
+                        only: /^v[0-9]+\.[0-9]+\.[0-9]+(-preview-[0-9]+)?$/
 
             - deploy:
                 name: deploy-nuget
