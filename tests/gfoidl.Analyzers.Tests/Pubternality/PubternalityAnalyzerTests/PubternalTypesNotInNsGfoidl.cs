@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
-namespace gfoidl.Analyzers.Tests.Tests.PubternalityAnalyzerTests
+namespace gfoidl.Analyzers.Tests.PubternalityAnalyzerTests
 {
     [TestFixture]
     public class PubternalTypesNotInNsGfoidl : PubternalityAnalyzerTestsBase

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 
-namespace gfoidl.Analyzers.Tests.Tests.PubternalityAnalyzerTests
+namespace gfoidl.Analyzers.Tests.PubternalityAnalyzerTests
 {
     public abstract class PubternalityAnalyzerTestsBase : DiagnosticVerifier
     {
